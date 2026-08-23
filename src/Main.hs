@@ -321,8 +321,8 @@ step dt
 -----------------------------------------------------------------------------
 -- Tuning constants. Velocities are px / ms, accelerations px / ms².
 walkSpeed, runAccel, friction, airControl, gravity, fallGravity, jumpSpeed, maxFall, coyoteTime :: Double
-walkSpeed   = 0.10
-runAccel    = 0.0007
+walkSpeed   = 0.12
+runAccel    = 0.0008
 friction    = 0.0012
 airControl  = 0.5
 gravity     = 0.0014  -- while rising with jump held
