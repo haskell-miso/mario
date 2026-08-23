@@ -4,6 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title> miso-mario </title>
+    <style>
+      /* Applied before the WASM app boots so the page doesn't flash white. */
+      body { margin: 0; background: #1b1b2f; color: #fff;
+             font-family: ui-monospace, Menlo, Consolas, monospace;
+             display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    </style>
   </head>
   <body>
     <h1 style="font-family:monospace;color:#fff;margin:12px 0 0"> 🍜 🍄 <a style="color:#fbd000" href="https://github.com/haskell-miso/miso-mario"> miso-mario </a></h1>
