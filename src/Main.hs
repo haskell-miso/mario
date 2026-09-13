@@ -35,7 +35,7 @@ main :: IO ()
 main = startApp defaultEvents app
 -----------------------------------------------------------------------------
 app :: App Model Action
-app = (component initialModel updateModel (\_ _ -> viewModel))
+app = (component initialModel updateModel viewModel)
   { subs =
       [ keyboardSub Keys
       , rAFSub Tick
@@ -488,7 +488,7 @@ clamp lo hi = max lo . min hi
 -----------------------------------------------------------------------------
 -- * View
 -----------------------------------------------------------------------------
-viewModel :: Model -> View context Model Action
+viewModel :: Model -> View context props Model Action
 viewModel m@Model{..} =
   div_ [ class_ "game" ]
     [ viewHud m
@@ -515,7 +515,7 @@ viewModel m@Model{..} =
     -- this keeps the virtual DOM diff small every frame.
     visible ox w = ox + w >= _camera - tile && ox <= _camera + viewportW + tile
 -----------------------------------------------------------------------------
-viewHud :: Model -> View context Model Action
+viewHud :: Model -> View context props Model Action
 viewHud Model{..} =
   div_ [ class_ "hud" ]
     [ span_ [] [ text ("SCORE " <> pad 6 _score) ]
@@ -528,7 +528,7 @@ viewHud Model{..} =
     taken = length (filter coinTaken _coins)
     pad n v = let s = ms v in ms (replicate (n - length (show v)) '0') <> s
 -----------------------------------------------------------------------------
-viewWin :: Model -> View context Model Action
+viewWin :: Model -> View context props Model Action
 viewWin Model{..} =
   div_ [ class_ "overlay" ]
     [ h2_ [] [ text "🏁 Course clear!" ]
@@ -536,7 +536,7 @@ viewWin Model{..} =
     , button_ [ class_ "btn", onClick Restart ] [ text "Play again (Enter)" ]
     ]
 -----------------------------------------------------------------------------
-viewMario :: Model -> View context Model Action
+viewMario :: Model -> View context props Model Action
 viewMario Model{..} =
   div_
     [ class_ "mario"
@@ -558,7 +558,7 @@ viewMario Model{..} =
       | otherwise = 2 + (floor (_walkClock / 70) `mod` 6)
     skidding = (left _input && _vx > 0.05) || (right _input && _vx < -0.05)
 -----------------------------------------------------------------------------
-viewPlatform :: Platform -> View context Model Action
+viewPlatform :: Platform -> View context props Model Action
 viewPlatform Platform{..} =
   div_ [ class_ cls, CSS.style_ (place pX pY pW pH) ] children
   where
@@ -571,20 +571,20 @@ viewPlatform Platform{..} =
       Pipe -> [ div_ [ class_ "pipe-top" ] [] ]
       _    -> []
 -----------------------------------------------------------------------------
-viewBlock :: Block -> View context Model Action
+viewBlock :: Block -> View context props Model Action
 viewBlock Block{..} =
   div_ [ class_ (if blockHit then "block used" else "block"), CSS.style_ (place blockX blockY tile tile) ]
     [ text (if blockHit then "" else "?") ]
 -----------------------------------------------------------------------------
-viewCoin :: Coin -> View context Model Action
+viewCoin :: Coin -> View context props Model Action
 viewCoin Coin{..} = div_ [ class_ "coin", CSS.style_ (place coinX coinY 16 24) ] []
 -----------------------------------------------------------------------------
-viewFlag :: View context Model Action
+viewFlag :: View context props Model Action
 viewFlag =
   div_ [ class_ "flagpole", CSS.style_ (place flagX 0 4 (9 * tile)) ]
     [ div_ [ class_ "flag" ] [] ]
 -----------------------------------------------------------------------------
-viewCloud :: (Double, Double, Double) -> View context Model Action
+viewCloud :: (Double, Double, Double) -> View context props Model Action
 viewCloud (cx, cy, s) =
   div_ [ class_ "cloud"
        , CSS.style_
@@ -594,7 +594,7 @@ viewCloud (cx, cy, s) =
            ]
        ] []
 -----------------------------------------------------------------------------
-viewBush :: Double -> View context Model Action
+viewBush :: Double -> View context props Model Action
 viewBush tx = div_ [ class_ "bush", CSS.style_ (place (tx * tile) 0 64 24) ] []
 -----------------------------------------------------------------------------
 -- | Position an absolutely-positioned world element. World @y@ grows
