@@ -35,7 +35,7 @@ main :: IO ()
 main = startApp defaultEvents app
 -----------------------------------------------------------------------------
 app :: App Model Action
-app = (component initialModel updateModel (\_ _ -> viewModel))
+app = (component initialModel updateModel viewModel)
   { subs =
       [ keyboardSub Keys
       , rAFSub Tick
